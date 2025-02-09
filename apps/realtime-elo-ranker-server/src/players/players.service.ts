@@ -12,11 +12,11 @@ export class PlayersService {
 
   async addPlayer(name: string): Promise<Player> {
     if (!name) {
-      throw new BadRequestException('El ID del jugador (nombre) es obligatorio');
+      throw new BadRequestException('Id is required');
     }
     const existingPlayer = await this.playerRepository.findOne({ where: { id: name } });
     if (existingPlayer) {
-      throw new ConflictException('El jugador ya existe');
+      throw new ConflictException('Player already exists');
     }
     const avgRank = await this.calculateAverageRank();
     const newPlayer = this.playerRepository.create({ id: name, rank: avgRank });
