@@ -11,6 +11,7 @@
     "docs/*"
   ],
   "scripts": {
+    "start": "npm run libs:ui:build && npm-run-all --parallel apps:client:dev apps:server:dev",
     "apps:client:dev": "npm run dev --workspace apps/realtime-elo-ranker-client",
     "apps:server:dev": "npm run start:dev --workspace apps/realtime-elo-ranker-server",
     "apps:simulator:run": "npm run start --workspace apps/realtime-elo-ranker-simulator",
@@ -26,6 +27,7 @@
     "generate-react-cli": "^8.4.9",
     "motion": "^11.17.0",
     "next": "15.1.4",
+    "npm-run-all": "^4.1.5",
     "typescript": "^5"
   }
 }

@@ -2,6 +2,15 @@
 
 Realtime Elo Ranker est une application web permettant de simuler des matchs entre des joueurs et de calculer et afficher leur classement Elo en temps réel.
 
+> ⚠️ Important : utilisez ces commandes pour lancer l'application
+```bash
+git clone https://github.com/MelchorRuiz/RealTimeEloRanker.git
+cd RealTimeEloRanker
+npm install
+npm start
+```
+
+
 ## Conteneurs Métiers
 
 `apps/realtime-elo-ranker-server` : Serveur de l'application (à implémenter)
@@ -40,7 +49,7 @@ Le client repose sur une source CSS exposée par la librairie `libs/ui` (@realti
 Pour ce faire :
 
 ```bash
-pnpm run libs:ui:build
+npm run libs:ui:build
 ```
 
 **Puis**
@@ -48,13 +57,13 @@ pnpm run libs:ui:build
 Lancer l'application :
 
 ```bash
-pnpm run apps:client:dev
+npm run apps:client:dev
 ```
 
 ## Lancer la doc swagger
 
 ```bash
-pnpm run apps:swagger:start
+npm run docs:swagger:start
 ```
 
 Le serveur Swagger sera accessible à l'adresse `http://localhost:3001/api-docs`.
@@ -66,7 +75,7 @@ Le serveur est en hot-reload : les modifications apportées au `swagger.yaml` se
 ## Lancer le mock de l'API
 
 ```bash
-pnpm run apps:api-mock:start
+npm run apps:api-mock:start
 ```
 
 Le mock de l'API sera accessible à l'adresse `http://localhost:8080`. Il ne doit pas être lancé en même temps que le serveur de l'application.
