@@ -5,16 +5,23 @@
   "keywords": [],
   "author": "",
   "license": "UNLICENSED",
+  "workspaces": [
+    "apps/*",
+    "libs/*",
+    "docs/*"
+  ],
   "scripts": {
-    "apps:client:dev": "pnpm run --filter ./apps/realtime-elo-ranker-client dev",
-    "apps:server:dev": "pnpm run --filter ./apps/realtime-elo-ranker-server start:dev",
-    "apps:api-mock:start": "pnpm run --filter ./apps/realtime-elo-ranker-api-mock start",
-    "libs:ui:build": "pnpm run --filter ./libs/ui build",
-    "libs:ui:test": "pnpm run --filter ./libs/ui test",
-    "docs:swagger:start": "pnpm run --filter ./docs/swagger start"
+    "apps:client:dev": "npm run dev --workspace apps/realtime-elo-ranker-client",
+    "apps:server:dev": "npm run start:dev --workspace apps/realtime-elo-ranker-server",
+    "apps:api-mock:start": "npm run start --workspace ./apps/realtime-elo-ranker-api-mock",
+    "libs:ui:build": "npm run build --workspace libs/ui",
+    "libs:ui:test": "npm run test --workspace libs/ui",
+    "docs:swagger:start": "npm run start --workspace docs/swagger"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.2",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.14",
     "generate-react-cli": "^8.4.9",
     "motion": "^11.17.0",
     "next": "15.1.4",

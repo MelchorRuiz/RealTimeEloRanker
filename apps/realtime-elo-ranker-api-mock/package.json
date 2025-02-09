@@ -8,6 +8,6 @@
   "keywords": [],
   "author": "Thibaud FAURIE",
   "devDependencies": {
-    "@mocks-server/main": "^4.1.0"
+    "@mocks-server/main": "^1.3.0"
   }
 }
