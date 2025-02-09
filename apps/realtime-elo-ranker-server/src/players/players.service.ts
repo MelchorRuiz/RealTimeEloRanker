@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
@@ -11,6 +11,13 @@ export class PlayersService {
   ) {}
 
   async addPlayer(name: string): Promise<Player> {
+    if (!name) {
+      throw new BadRequestException('El ID del jugador (nombre) es obligatorio');
+    }
+    const existingPlayer = await this.playerRepository.findOne({ where: { id: name } });
+    if (existingPlayer) {
+      throw new ConflictException('El jugador ya existe');
+    }
     const avgRank = await this.calculateAverageRank();
     const newPlayer = this.playerRepository.create({ id: name, rank: avgRank });
     return this.playerRepository.save(newPlayer);

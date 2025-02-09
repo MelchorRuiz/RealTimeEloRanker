@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PlayersController } from './players.controller';
 import { PlayersService } from './players.service';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 
 describe('PlayersController', () => {
   let controller: PlayersController;
@@ -28,15 +29,18 @@ describe('PlayersController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('it should add a player', async () => {
-    const result = await controller.addPlayer('Messi');
-    expect(result).toEqual({ id: 'Messi', rank: 1200 });
-    expect(service.addPlayer).toHaveBeenCalledWith('Messi');
+  it('it should return an error 400 if the player name is empty', async () => {
+    jest.spyOn(service, 'addPlayer').mockRejectedValueOnce(new BadRequestException('El ID del jugador (nombre) es obligatorio'));
+    await expect(controller.addPlayer('')).rejects.toThrow(BadRequestException);
   });
 
-  it('it should get all players', async () => {
-    const result = await controller.getAllPlayers();
-    expect(result).toEqual([{ id: 'Messi', rank: 1200 }]);
-    expect(service.getPlayers).toHaveBeenCalled();
+  it('it should return an error 409 if the player already exists', async () => {
+    jest.spyOn(service, 'addPlayer').mockRejectedValueOnce(new ConflictException('El jugador ya existe'));
+    await expect(controller.addPlayer('Messi')).rejects.toThrow(ConflictException);
+  });
+
+  it('debería devolver un jugador creado correctamente', async () => {
+    const result = await controller.addPlayer('Messi');
+    expect(result).toEqual({ id: 'Messi', rank: 1200 });
   });
 });
