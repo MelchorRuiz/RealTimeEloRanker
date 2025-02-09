@@ -2,12 +2,15 @@ import { Injectable, BadRequestException, ConflictException, NotFoundException }
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PlayerUpdatedEvent } from '../ranking/ranking.events';
 
 @Injectable()
 export class PlayersService {
   constructor(
     @InjectRepository(Player)
     private readonly playerRepository: Repository<Player>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async addPlayer(name: string): Promise<Player> {
@@ -20,6 +23,11 @@ export class PlayersService {
     }
     const avgRank = await this.calculateAverageRank();
     const newPlayer = this.playerRepository.create({ id: name, rank: avgRank });
+
+    this.eventEmitter.emit('player.updated', 
+      new PlayerUpdatedEvent('RankingUpdate', { id: newPlayer.id, rank: newPlayer.rank })
+    );
+
     return this.playerRepository.save(newPlayer);
   }
 

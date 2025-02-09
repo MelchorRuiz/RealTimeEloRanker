@@ -4,6 +4,7 @@ import { Player } from './entities/player.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BadRequestException, ConflictException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 describe('PlayersService', () => {
   let service: PlayersService;
@@ -17,6 +18,7 @@ describe('PlayersService', () => {
           provide: getRepositoryToken(Player),
           useClass: Repository,
         },
+        EventEmitter2,
       ],
     }).compile();
 

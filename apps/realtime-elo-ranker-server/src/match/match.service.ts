@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from '../players/entities/player.entity';
 import { Match } from './entities/match.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { PlayerUpdatedEvent } from '../ranking/ranking.events';
 
 @Injectable()
 export class MatchService {
     constructor(
         @InjectRepository(Player)
         private readonly playerRepository: Repository<Player>,
+        private eventEmitter: EventEmitter2,
     ) { }
 
     async createMatch(match: Match): Promise<any> {
@@ -25,6 +28,14 @@ export class MatchService {
         loser.rank = newRanks.loserRank;
 
         await this.playerRepository.save([winner, loser]);
+
+        this.eventEmitter.emit('player.updated',
+            new PlayerUpdatedEvent('RankingUpdate', { id: winner.id, rank: winner.rank }),
+        );
+
+        this.eventEmitter.emit('player.updated',
+            new PlayerUpdatedEvent('RankingUpdate', { id: loser.id, rank: loser.rank }),
+        );
 
         return {
             winner: { id: winner.id, rank: winner.rank },
