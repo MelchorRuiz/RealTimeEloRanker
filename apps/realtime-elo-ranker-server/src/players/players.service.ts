@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException, ConflictException } from '@nestjs/common';
+import { Injectable, BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Player } from './entities/player.entity';
@@ -24,7 +24,11 @@ export class PlayersService {
   }
 
   async getPlayers(): Promise<Player[]> {
-    return this.playerRepository.find();
+    const players = await this.playerRepository.find();
+    if (players.length === 0) {
+      throw new NotFoundException('No hay jugadores en la base de datos');
+    }
+    return players;
   }
 
   private async calculateAverageRank(): Promise<number> {
